@@ -347,9 +347,7 @@ void Sorter::SortAll(){
   MergeSort(0, arrayLength-1);
   end = clock();
   cout << endl;
-  for(int i = 0; i < arrayLength; ++i){
-    cout << unsortedArray[i] << ", ";
-  }
+  
   cout << endl;
   totalTime = (float(end-start)/CLOCKS_PER_SEC)*1000;
   cout << "Merge sort start: 0ms" << endl;
