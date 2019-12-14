@@ -1,11 +1,11 @@
 #include "Sorter.h"
 #include <iostream>
 #include <fstream>
-#include <ctime>
-#include <chrono>
+#include <time.h>
+//#include <chrono>
 using namespace std;
-using namespace std::chrono;
-using time_stamp = time_point<system_clock, milliseconds>;
+//using namespace std::chrono;
+//using time_stamp = time_point<system_clock, milliseconds>;
 Sorter::Sorter(){
   unsortedArray = NULL;
 }
@@ -32,19 +32,137 @@ void Sorter::ReadValues(){
   }
   file.close();
 }
+int Sorter::Partition(int start, int end){
+  double pivot = unsortedArray[end];
+  int i = start - 1;
+  for(int j = start; j <= end - 1; ++j){
+    if(unsortedArray[j] < pivot){
+      i++;
+      Swap(i, j);
 
-void Sorter::QuickSort(){
+    }
+  }
+  Swap(i+1, end);
+  return i+1;
+}
+void Sorter::Swap(int first, int second){
+  double hold = unsortedArray[second];
+  unsortedArray[second] = unsortedArray[first];
+  unsortedArray[first] = hold;
+}
+//start at 0, size - 1
+void Sorter::QuickSort(int start, int end){
   //perform quick sort
-  ReadValues();
-  long int ts = static_cast<long int>(time_point_cast<milliseconds>(system_clock::now()));
+  //cal ReadValues() BEFORE function call
+  if(start < end){
+    int piv = Partition(start, end);
+    QuickSort(start, piv - 1);
+    QuickSort(piv + 1, end);
+  }
+  /**
+
+  //long int ts = static_cast<long int>(time_point_cast<milliseconds>(system_clock::now()));
+  int pivotIndex = start;
+  double pivot = unsortedArray[start];
+  double hold;
+  for(int i = start + 1; i <= end; ++i){
+    for(int k = 0; k < arrayLength; ++k){
+      cout << unsortedArray[k] << ", ";
+    }
+    cout << endl;
+    hold = unsortedArray[i];
+    if(hold < pivot){
+      cout << "i: " << i << endl;
+      for(int j = i; j > start; --j){
+        //uu
+        cout << "j: " << j << endl;
+        unsortedArray[j] = unsortedArray[j-1];
+        pivotIndex++;
+        for(int k = 0; k < arrayLength; ++k){
+          cout << unsortedArray[k] << ", ";
+        }
+        cout << endl;
+
+      }
+      unsortedArray[start] = hold;
+
+    }
+  }
+  if(pivotIndex - start > 1){
+    cout << "recurse1" << endl;
+
+    QuickSort(start, pivotIndex-1);
+  }
+  if(end-pivotIndex > 1){
+    cout << "recurse2" << endl;
+    QuickSort(pivotIndex+1, end);
+  }
+**/
 
 
+
+  /**
+
+  int pivotIndex = 0;
+  double pivot = unsortedArray[start];
+  double hold, hold1;
+  int i,j;
+  int segSize = end - start + 1;
+  for(i = start + 1; i < end + 1; ++i){
+    for(int k = 0; k < arrayLength; ++k){
+      cout << unsortedArray[k] << ", ";
+    }
+    cout << endl;
+    hold = unsortedArray[i];
+    if(hold < pivot){
+
+
+      for(j = i; j > start; --j){
+
+        unsortedArray[j + 1] = unsortedArray[j];
+      }
+      unsortedArray[start] = hold;
+      pivotIndex++;
+      for(int k = 0; k < arrayLength; ++k){
+        cout << unsortedArray[k] << ", ";
+      }
+      cout << endl;
+
+
+    }
+    else if(hold > pivot){
+      for(j = pivotIndex + 1; j < end - 1; ++j){
+        //hold1 = unsortedArray[j];
+
+        unsortedArray[j] = unsortedArray[j+1];
+      }
+      unsortedArray[end] = hold;
+      for(int k = 0; k < arrayLength; ++k){
+        cout << unsortedArray[k] << ", ";
+      }
+      cout << endl;
+
+    }
+  }
+  //recursive call
+  if((pivotIndex - start) != 1){
+    cout << "yeet1" << endl;
+    QuickSort(start, pivotIndex-1);
+  }
+  if((end - pivotIndex) != 1){
+    cout << "yeet2" << endl;
+    QuickSort(pivotIndex+1, end);
+  }
+  for(int k = 0; k < arrayLength; ++k){
+    cout << unsortedArray[k] << ", ";
+  }
+**/
 
 }
 
 void Sorter::InsertionSort(){
   //perform insertion sort
-  ReadValues();
+
   for(int k = 0; k < arrayLength; ++k){
     cout << unsortedArray[k] << ", ";
   }
@@ -58,23 +176,19 @@ void Sorter::InsertionSort(){
     unsortedArray[k] = temp;
 
   }
-  cout << "Insertion Sort completed." << endl;
-  for(int k = 0; k < arrayLength; ++k){
-    cout << unsortedArray[k] << ", ";
-  }
-  cout << endl;
+
 
 }
 
 void Sorter::BubbleSort(){
   //perform bubble sort
-  time_t time1, time2;
-  int total;
-  ReadValues();
+  //time_t time1, time2;
+  int total = 0;
+
   for(int k = 0; k < arrayLength; ++k){
     cout << unsortedArray[k] << ", ";
   }
-  time1 = time(NULL);
+  //time1 = time(NULL);
   for(int i = 0; i < arrayLength; ++i){
     double temp = 0;
     for(int j = 0; j < arrayLength-1; ++j){
@@ -85,18 +199,15 @@ void Sorter::BubbleSort(){
       }
     }
   }
-  time2 = time(NULL);
-  total = time2 - time1;
-  cout << "Bubble Sort completed. Time needed: " << total << "ms." << endl;
-  for(int k = 0; k < arrayLength; ++k){
-    cout << unsortedArray[k] << ", ";
-  }
+  //time2 = time(NULL);
+  //total = time2 - time1;
 
-  cout << endl;
+
+
 
 }
 void Sorter::SelectionSort(){
-  ReadValues();
+
   for(int k = 0; k < arrayLength; ++k){
     cout << unsortedArray[k] << ", ";
   }
@@ -117,22 +228,15 @@ void Sorter::SelectionSort(){
 
     }
   }
-  cout << "Selection Sort completed." << endl;
-  for(int k = 0; k < arrayLength; ++k){
-    cout << unsortedArray[k] << ", ";
-  }
-  cout << endl;
+
+
+}
+void Sorter::MergeSort(){
+  //perform merge Sort
 
 }
 
-void Sorter::BeadSort(){
-  //perform bead sort
-  ReadValues();
-
-}
-void Sorter::ShiftArray(){
-
-}
+/**
 double* Sorter::MakeCopy(){
   //https://www.tutorialspoint.com/cplusplus/cpp_return_arrays_from_functions.htm
   static double arrayCopy[10];
@@ -141,14 +245,54 @@ double* Sorter::MakeCopy(){
   }
   return arrayCopy;
 }
+**/
 
 void Sorter::SortAll(){
+  clock_t start,end;
+  float totalTime;
+  cout << "Imported array contains " << arrayLength << "double values." << endl;
+  cout << "---------------------------------------" << endl;
   //does everything
-  //ReadValues();
-  QuickSort();
+
+  ReadValues();
+  for(int k = 0; k < arrayLength; ++k){
+    cout << unsortedArray[k] << ", ";
+  }
+  cout << endl;
+  start = clock();
+  QuickSort(0, arrayLength-1);
+  for(int k = 0; k < arrayLength; ++k){
+    cout << unsortedArray[k] << ", ";
+  }
+  cout << endl;
+  end = clock();
+  totalTime = float(end-start)/CLOCKS_PER_SEC;
+  cout << "Time to sort "<< arrayLength << "double values with quick sort: " << totalTime << endl;
+
+
+  ReadValues();
+  start = clock();
   InsertionSort();
+  end = clock();
+  totalTime = (float(end-start)/CLOCKS_PER_SEC)*1000;
+  cout << "Insertion sort start: 0ms" << endl;
+  cout << "Insertion sort end: " << totalTime << "ms" <<endl;
+
+  ReadValues();
+  start = clock();
   SelectionSort();
+  end = clock();
+  totalTime = (float(end-start)/CLOCKS_PER_SEC)*1000;
+  cout << "Selection sort start: 0ms" << endl;
+  cout << "Selection sort end: " << totalTime << "ms" <<endl;
+
+  ReadValues();
+  start = clock();
   BubbleSort();
-  BeadSort();
+  end = clock();
+  totalTime = (float(end-start)/CLOCKS_PER_SEC)*1000;
+  cout << "Bubble sort start: 0ms" << endl;
+  cout << "Bubble sort end: " << totalTime << "ms" << endl;
+
 
 }

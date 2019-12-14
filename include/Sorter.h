@@ -7,15 +7,18 @@ public:
   ~Sorter();
 
   void ReadValues();
-  void QuickSort();
+  void QuickSort(int start, int end);
   void InsertionSort();
   void SelectionSort();
   void BubbleSort();
-  void BeadSort();
+
+  void MergeSort();
+  int Partition(int start, int end);
+  void Swap(int first, int second);
 
   void SortAll();
-  void ShiftArray();
-  double* MakeCopy();
+
+  //double* MakeCopy();
 
   string name;
   int arrayLength;
