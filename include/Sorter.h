@@ -8,6 +8,8 @@ public:
 
   void ReadValues();
   void QuickSort(int start, int end);
+  void MergeSort(int start, int end);
+  void Merge(int start, int middle, int end);
   void InsertionSort();
   void SelectionSort();
   void BubbleSort();
